@@ -4,80 +4,127 @@ const World = Matter.World;
 const Bodies = Matter.Bodies;
 const Body = Matter.Body;
 const Render = Matter.Render;
-const Constraint = Matter.Constraint;
-var bob1,bob2,bob3, bob4,bob5, roofObject
-var rope1,rope2,rope3, rope4,rope5;
-var world;
+const Constraint=Matter.Constraint;
 
+var tree, stone,ground;
+var mango1,mango2,mango3,mango4,mango5,mango6,mango7,mango8,mango9,mango10,mango11,mango12;
+var world,boy;
+
+
+var launcher;
+
+function preload(){
+	boy=loadImage("images/boy.png");
+}
 
 function setup() {
-	createCanvas(800, 600);
-	rectMode(CENTER);
-
-
+	createCanvas(1300, 600);
 	engine = Engine.create();
 	world = engine.world;
 
-	roofObject=new roof(400,250,230,20);
-	bob1 = new bob(320,575,40)
-	bob2 = new bob(360,575,40)
-	bob3 = new bob(400,575,40)
-	bob4 = new bob(440,575,40)
-	bob5 = new bob(480,575,40)
-	
-	rope1=new rope(bob1.body,roofObject.body,-80)
-	rope2=new rope(bob2.body,roofObject.body,-40)
-	rope3=new rope(bob3.body,roofObject.body,0)
-	rope4=new rope(bob4.body,roofObject.body,40)
-	rope5=new rope(bob5.body,roofObject.body,80)
-	
+	stone = new Stone(235,420,30); 
+
+	mango1 = new Mango(1100,100,30);
+  mango2 = new Mango(1170,130,30);
+	mango3 = new Mango(1010,140,30);
+	mango4 = new Mango(1000,70,30);
+	mango5 = new Mango(1100,70,30);
+	mango6 = new Mango(1000,230,30);
+	mango7 = new Mango(900,230,40);
+	mango8 = new Mango(1140,150,40);
+	mango9 = new Mango(1100,230,40);
+	mango10 = new Mango(1200,200,40);
+	mango11 = new Mango(1120,50,40);
+	mango12 = new Mango(900,160,40);
+
+	tree = new Tree(1050,580);
+	ground = new Ground(width/2,600,width,20);
+
+  //create launcher with stone as bodyA
+  launcher = new Launcher(stone.body,{x:235,y:420})
+
 	Engine.run(engine);
-	
-  
 }
 
 function draw() {
-  rectMode(CENTER);
+
   background(230);
-  roofObject.display();
-
-  rope1.display();
-  rope2.display();
-  rope3.display();
-  rope4.display();
-  rope5.display();
-
-  bob1.display();
-  bob2.display();
+  Engine.update(engine);
+  textSize(25);
+  text("Hit the mangoes with the stone!!",50 ,50);
+  image(boy ,200,340,200,300);
   
-  bob3.display();
-  bob4.display();
-  bob5.display();
+
+  tree.display();
+  stone.display();
+
+
+  mango1.display();
+  mango2.display();
+  mango3.display();
+  mango4.display();
+  mango6.display();
+  mango7.display();
+  mango8.display();
+  mango9.display();
+  mango10.display();
+  mango11.display();
+  mango12.display();
+
+  stone.display();
+  ground.display();
+  launcher.display();
+
+
+  detectollision(stone,mango1);
+  detectollision(stone,mango2);
+  detectollision(stone,mango3);
+  detectollision(stone,mango4);
+  detectollision(stone,mango5);
+  detectollision(stone,mango6);
+  detectollision(stone,mango7);
+  detectollision(stone,mango8);
+  detectollision(stone,mango9);
+  detectollision(stone,mango10);
+  detectollision(stone,mango11);
+  detectollision(stone,mango12);
+}
+
+function mouseDragged()
+{
+
+	Matter.Body.setPosition
+      (stone.body, {x:mouseX, y:mouseY}) 
+
+//	Matter.Body.Position
+      (stone.body, {x:mouseX, y:mouseY}) 
+
+	//Matter.Body.setPosition
+      ({x:mouseX, y:mouseY}) 
+
+	//Matter.setPosition
+     (stone.body, {x:mouseX, y:mouseY}) 
+
+}
+
+function mouseReleased()
+{
+//	launcher();
+	launcher.fly();
+//	launcherfly();
+//	launcher.fly;
 }
 
 
-//CHOOSE THE CORRECT OPTION TO APPLY A KEYPRESSED TO CHANGE THE POSITION OF BALL OBJECT TO THE LEFT WHEN UP ARROW KEY IS PRESSED
+function detectollision(lstone,lmango){
 
-// function keyPressed() {
-// 	if (keyCode === DOWN_ARROW) {
-// 		Matter.Body.applyForce(bob1.body,bob1.body.position,{x:-50,y:-45});
-// 	}
-// }
+  mangoBodyPosition=lmango.body.position
+  stoneBodyPosition=lstone.body.position
+  
+  var distance=dist(stoneBodyPosition.x, stoneBodyPosition.y, mangoBodyPosition.x, mangoBodyPosition.y)
+  	if(distance<=lmango.r+lstone.r)
+    {
+  	  Matter.Body.setStatic(lmango.body,false);
+    }
 
-// function keyPressed() {
-// 	if (keyCode === UP_ARROW) {
-		//Matter.Body.applyForce(bob1,bob1.position,{x:-50,y:-45});
-// 	}
-// }
-
-// function keyPressed() {
-// 	if (keyCode === UP_ARROW) {
- 		//Matter.Body.applyForce(bob1.body,{x:-50,y:-45});
-// 	}
-// }
-
- function keyPressed() {
- 	if (keyCode === UP_ARROW) {
- 		Matter.Body.applyForce(bob1.body,bob1.body.position,{x:-50,y:-45});
- 	}
- }
+  }
